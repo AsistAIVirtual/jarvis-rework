@@ -3,6 +3,7 @@ import ReminderForm from './components/ReminderForm';
 import DailyVolume from './components/DailyVolume';
 import GreenLockPeriod from './components/GreenLockPeriod';
 
+import { useEffect } from 'react';
 export default function Dashboard() {
   const [jarvisPrice, setJarvisPrice] = useState(null);
   const [virtualPrice, setVirtualPrice] = useState(null);
@@ -38,14 +39,14 @@ export default function Dashboard() {
           backgroundRepeat: 'no-repeat',
         }}
       >
-        <div className="flex flex-col items-center justify-center text-center py-10">
-          <div className="text-center text-gray-200 text-sm italic font-bold w-full mt-1">
-  Just A Rather Virgen Intelligent System (J.A.R.V.I.S.)
-</div>
-
+        <div className="flex flex-col items-center justify-center text-center py-6">
 
 <div className="flex justify-between items-center w-full mb-4 px-4">
-  <h1 className="text-3xl italic font-bold">Virgenscan</h1>
+  
+<h1 className="text-3xl italic font-bold">Virgenscan</h1>
+<div className="text-center text-gray-300 text-sm italic font-bold w-full mt-1">
+  Just A Rather Virgen Intelligent System (J.A.R.V.I.S.)
+</div>
   <a href="https://twitter.com/jarvisagentai" target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 text-sm text-gray-300 hover:text-white">
     <img src="/images/xlogo.png" alt="X" className="w-4 h-4" />
     <span>@jarvisagentai</span>
@@ -69,9 +70,14 @@ export default function Dashboard() {
             $JARVIS is live. <br />
             <span className="text-xs">Official CA: 0x1E562BF73369D1d5B7E547b8580039E1f05cCc56</span>
           </p>
-          <button className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded mb-6">
+          <a
+            href="https://app.virtuals.io/virtuals/28325"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-yellow-400 hover:bg-yellow-500 text-black font-bold py-2 px-4 rounded mb-6 inline-block"
+          >
             TRADE $JARVIS
-          </button>
+          </a>
           <div className="flex flex-wrap justify-center gap-3">
             <button
               onClick={() => setShowSection('dailyVolume')}
@@ -116,4 +122,23 @@ export default function Dashboard() {
 }
 
 
- 
+  useEffect(() => {
+    async function fetchPrices() {
+      try {
+        const jarvisRes = await fetch('https://api.geckoterminal.com/api/v2/networks/base/pools/0xb00c5f0f9aa2f95057d7b9a18ad7d2d18f6ff298');
+        const jarvisData = await jarvisRes.json();
+        const jarvisPrice = jarvisData.data.attributes.base_token_price_usd;
+        
+
+        const virtualRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=virtual-protocol&vs_currencies=usd');
+        const virtualData = await virtualRes.json();
+        const virtualPrice = virtualData["virtual-protocol"].usd;
+        
+      } catch (error) {
+        console.error("Failed to fetch token prices:", error);
+      }
+    }
+
+    fetchPrices();
+  }, []);
+
