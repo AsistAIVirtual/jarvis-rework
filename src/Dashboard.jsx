@@ -1,10 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ReminderForm from './components/ReminderForm';
 import DailyVolume from './components/DailyVolume';
 import GreenLockPeriod from './components/GreenLockPeriod';
 
 import { useEffect } from 'react';
 export default function Dashboard() {
+  const [jarvisPrice, setJarvisPrice] = useState(null);
+  const [virtualPrice, setVirtualPrice] = useState(null);
+
+  useEffect(() => {
+    async function fetchPrices() {
+      try {
+        const jarvisRes = await fetch('https://api.geckoterminal.com/api/v2/networks/base/pools/0xb00c5f0f9aa2f95057d7b9a18ad7d2d18f6ff298');
+        const jarvisData = await jarvisRes.json();
+        const jarvis = jarvisData.data.attributes.base_token_price_usd;
+        setJarvisPrice(parseFloat(jarvis).toFixed(4));
+
+        const virtualRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=virtual-protocol&vs_currencies=usd');
+        const virtualData = await virtualRes.json();
+        setVirtualPrice(parseFloat(virtualData["virtual-protocol"].usd).toFixed(4));
+      } catch (error) {
+        console.error("Failed to fetch token prices:", error);
+      }
+    }
+    fetchPrices();
+  }, []);
+
   const [showSection, setShowSection] = useState('subscribeUnlock');
 
   return (
@@ -32,11 +53,11 @@ export default function Dashboard() {
 <div className="flex justify-center items-center space-x-6 mb-4">
   <div className="flex items-center space-x-2">
     <img src="/images/jarvis.png" alt="JARVIS" className="w-5 h-5" />
-    <span className="text-sm">$JARVIS: <span id="jarvisPrice">Loading...</span></span>
+    <span className="text-sm">$JARVIS: {jarvisPrice ? `$${jarvisPrice}` : "Loading..."}</span>
   </div>
   <div className="flex items-center space-x-2">
     <img src="/images/virtual.png" alt="Virtual" className="w-5 h-5" />
-    <span className="text-sm">Virtual: <span id="virtualPrice">Loading...</span></span>
+    <span className="text-sm">Virtual: {virtualPrice ? `$${virtualPrice}` : "Loading..."}</span>
   </div>
 </div>
 
@@ -98,12 +119,12 @@ export default function Dashboard() {
         const jarvisRes = await fetch('https://api.geckoterminal.com/api/v2/networks/base/pools/0xb00c5f0f9aa2f95057d7b9a18ad7d2d18f6ff298');
         const jarvisData = await jarvisRes.json();
         const jarvisPrice = jarvisData.data.attributes.base_token_price_usd;
-        document.getElementById('jarvisPrice').innerText = `$${parseFloat(jarvisPrice).toFixed(4)}`;
+        
 
         const virtualRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=virtual-protocol&vs_currencies=usd');
         const virtualData = await virtualRes.json();
         const virtualPrice = virtualData["virtual-protocol"].usd;
-        document.getElementById('virtualPrice').innerText = `$${parseFloat(virtualPrice).toFixed(4)}`;
+        
       } catch (error) {
         console.error("Failed to fetch token prices:", error);
       }
