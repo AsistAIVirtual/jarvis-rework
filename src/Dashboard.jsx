@@ -40,14 +40,14 @@ export default function Dashboard() {
       >
         <div className="flex flex-col items-center justify-center text-center py-6">
 
-<div className="flex justify-between items-center w-full mb-4 px-4">
+<div className="flex justify-between items-center w-full mb-6 px-6">
   
 <h1 className="text-3xl italic font-bold">Virgenscan</h1>
-<div className="text-center text-gray-300 text-sm italic font-bold w-full mt-2">
+<div className="text-center text-gray-300 text-sm italic font-bold w-full mt-1">
   Just A Rather Virgen Intelligent System (J.A.R.V.I.S.)
 </div>
   <a href="https://x.com/jarvisagentai" target="_blank" rel="noopener noreferrer">
-  <img src="/images/xlogo.png" alt="X" className="w-8 h-8 hover:opacity-80 transition-opacity duration-200" />
+  <img src="/images/xlogo.png" alt="X" className="w-16 h-16 hover:opacity-80 transition-opacity duration-200" />
 </a>
 </div>
 
