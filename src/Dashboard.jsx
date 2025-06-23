@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import ReminderForm from './components/ReminderForm';
 import DailyVolume from './components/DailyVolume';
 import GreenLockPeriod from './components/GreenLockPeriod';
-
-import { useEffect } from 'react';
 export default function Dashboard() {
   const [jarvisPrice, setJarvisPrice] = useState(null);
   const [virtualPrice, setVirtualPrice] = useState(null);
@@ -111,25 +109,3 @@ export default function Dashboard() {
     </>
   );
 }
-
-
-  useEffect(() => {
-    async function fetchPrices() {
-      try {
-        const jarvisRes = await fetch('https://api.geckoterminal.com/api/v2/networks/base/pools/0xb00c5f0f9aa2f95057d7b9a18ad7d2d18f6ff298');
-        const jarvisData = await jarvisRes.json();
-        const jarvisPrice = jarvisData.data.attributes.base_token_price_usd;
-        
-
-        const virtualRes = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=virtual-protocol&vs_currencies=usd');
-        const virtualData = await virtualRes.json();
-        const virtualPrice = virtualData["virtual-protocol"].usd;
-        
-      } catch (error) {
-        console.error("Failed to fetch token prices:", error);
-      }
-    }
-
-    fetchPrices();
-  }, []);
-
